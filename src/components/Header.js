@@ -2,37 +2,42 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import { selectCars } from "../features/car/carSlice";
+import { useSelector } from "react-redux";
 
 const Header = () => {
     const [burgerStatus, setBurgerStatus] = useState(false);
-
+    const cars = useSelector(selectCars);
     return (
         <Container>
             <Logo>
                 <img src="./images/logo.svg" alt="" />
             </Logo>
             <Nav>
-                <a href="#">Model S</a>
-
-                <a href="#">Model X</a>
-
-                <a href="#">Model 3</a>
-
-                <a href="#">Model Y</a>
-
+                {cars &&
+                    cars.map((car, index) => (
+                        <a key={index} href="#">
+                            {car}
+                        </a>
+                    ))}
                 <a href="#">Solar Panels</a>
-
                 <a href="#">Solar Roof</a>
             </Nav>
-            <ShopTesla>
+            <RightMenu>
                 <a href="#">Shop</a>
                 <a href="#">Tesla Account</a>
                 <CustomMenu onClick={() => setBurgerStatus(true)}></CustomMenu>
-            </ShopTesla>
+            </RightMenu>
             <BurgerNav show={burgerStatus}>
                 <CloseWrapper>
                     <CustomClose onClick={() => setBurgerStatus(false)} />
                 </CloseWrapper>
+                {cars &&
+                    cars.map((car, index) => (
+                        <li key={index}>
+                            <a href="#">{car}}</a>
+                        </li>
+                    ))}
                 <li>
                     <a href="#">Excisting Inventory</a>
                 </li>
@@ -66,6 +71,7 @@ const Container = styled.div`
     position: fixed;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 0 20px;
     top: 0;
     left: 0;
@@ -93,9 +99,10 @@ const Nav = styled.div`
     }
 `;
 
-const ShopTesla = styled.div`
+const RightMenu = styled.div`
     display: flex;
     align-items: center;
+
     a {
         font-weight: 600px;
         text-transform: uppercase;
