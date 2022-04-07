@@ -2,35 +2,38 @@ import React from "react";
 import styled from "styled-components";
 import Fade from "react-reveal/Fade";
 
-const Section = ({
+function Section({
     title,
-    descirption,
+    description,
     leftButtonText,
     rightButtonText,
     backgroundImage,
-}) => {
+    showDownArrow,
+}) {
     return (
         <Wrap bgImage={backgroundImage}>
             <Fade bottom>
                 <ItemText>
                     <h1>{title}</h1>
-                    <p>{descirption}</p>
+                    <p>{description}</p>
                 </ItemText>
             </Fade>
-            <Fade bottom>
-                <Buttons>
+            <Buttons>
+                <Fade bottom>
                     <ButtonGroup>
                         <LeftButton>{leftButtonText}</LeftButton>
                         {rightButtonText && (
                             <RightButton>{rightButtonText}</RightButton>
                         )}
                     </ButtonGroup>
-                    <DownArrow src="/images/down-arrow.svg" />
-                </Buttons>
-            </Fade>
+                </Fade>
+                {showDownArrow && (
+                    <DownArrow src="/images/down-arrow.svg"></DownArrow>
+                )}
+            </Buttons>
         </Wrap>
     );
-};
+}
 
 export default Section;
 
@@ -44,7 +47,9 @@ const Wrap = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    background-image: ${(props) => `url(${"/images/" + props.bgImage})`};'
+    background-image: ${(props) => `url("/images/${props.bgImage}")`};
+    scroll-snap-align: start;
+    z-index: 1;
 `;
 
 const ItemText = styled.div`
@@ -52,15 +57,22 @@ const ItemText = styled.div`
     text-align: center;
 `;
 
+const Buttons = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
 const ButtonGroup = styled.div`
     display: flex;
     margin-bottom: 30px;
+    gap: 25px;
     @media (max-width: 768px) {
         flex-direction: column;
-    } ;
+    }
 `;
 
 const LeftButton = styled.div`
+    cursor: pointer;
     background-color: rgba(23, 26, 32, 0.8);
     height: 40px;
     width: 256px;
@@ -68,25 +80,21 @@ const LeftButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 12px;
     border-radius: 100px;
     opacity: 0.85;
     text-transform: uppercase;
-    cursor: pointer;
-    margin: 14px;
+    font-size: 12px;
+    font-weight: bold;
 `;
 
 const RightButton = styled(LeftButton)`
-    background-color: rgba(244, 244, 244, 0.65);
+    background-color: white;
+    opacity: 0.65;
     color: black;
 `;
-
 const DownArrow = styled.img`
+    margin-top: 20px;
+    margin-bottom: 20px;
     height: 40px;
-    overflow-x: hidden;
-    animation: animateDown infinite 1.5s;
-    display: block;
-    margin: 0 auto;
+    animation: bounce infinite 1.5s;
 `;
-
-const Buttons = styled.div``;
